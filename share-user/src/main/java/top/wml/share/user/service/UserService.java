@@ -5,10 +5,13 @@ import jakarta.annotation.Resource;
 import org.springframework.stereotype.Service;
 import top.wml.share.common.exception.BusinessException;
 import top.wml.share.common.exception.BusinessExceptionEnum;
+import top.wml.share.common.util.SnowUtil;
 import top.wml.share.user.domain.dto.LoginDTO;
 
 import top.wml.share.user.domain.entity.User;
 import top.wml.share.user.mapper.UserMapper;
+
+import java.util.Date;
 
 @Service
 public class UserService {
@@ -32,6 +35,26 @@ public class UserService {
        }
        return userDB;
 
+    }
+
+    public Long register(LoginDTO loginDTO){
+        User userDB = userMapper.selectOne(new QueryWrapper<User>().lambda().eq(User::getPhone, loginDTO.getPhone()));
+        if(userDB != null){
+             throw new BusinessException(BusinessExceptionEnum.PHONE_EXIST);
+        }
+        User savedUser = User.builder()
+                .id(SnowUtil.getSnowflakeNextId())
+                .phone(loginDTO.getPhone())
+                .password(loginDTO.getPassword())
+                .nickname("新用户")
+                .roles("user")
+                .avatarUrl("https://i2.100024.xyz/2023/01/26/3exzjl.webp")
+                .bonus(100)
+                .createTime(new Date())
+                .updateTime(new Date())
+                .build();
+        userMapper.insert(savedUser);
+        return savedUser.getId();
     }
 
 }
