@@ -8,6 +8,7 @@ Accept: application/json
 ###
 GET http://localhost:8000/user-service/user/count
 Accept: application/json
+token: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYmYiOjE2OTY2NzU0OTgsInBob25lIjoiMTM5NTE5MDUxNzEiLCJpZCI6MSwiZXhwIjoxNjk3Njc1NDk4LCJpYXQiOjE2OTY2NzU0OTh9.Lt69bo9c-0HU3PRDioYSxK41k4ttf7RLGfgjri02CCg
 
 ###
 POST http://localhost:8000/user-service/user/login

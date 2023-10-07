@@ -1,4 +1,4 @@
-package top.wml.share.common.util;
+package top.wml.share.gateway.util;
 
 import cn.hutool.core.date.DateField;
 import cn.hutool.core.date.DateTime;
