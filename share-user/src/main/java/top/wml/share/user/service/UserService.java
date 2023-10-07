@@ -1,5 +1,7 @@
 package top.wml.share.user.service;
 
+import cn.hutool.core.bean.BeanUtil;
+import cn.hutool.jwt.JWTUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import jakarta.annotation.Resource;
 import org.springframework.stereotype.Service;
@@ -10,8 +12,11 @@ import top.wml.share.user.domain.dto.LoginDTO;
 
 import top.wml.share.user.domain.entity.User;
 import top.wml.share.user.mapper.UserMapper;
+import top.wml.share.user.resp.UserLoginResp;
 
+import java.nio.charset.StandardCharsets;
 import java.util.Date;
+import java.util.Map;
 
 @Service
 public class UserService {
@@ -23,7 +28,7 @@ public class UserService {
         return userMapper.selectCount(null);
     }
 
-    public User login(LoginDTO loginDTO){
+    public UserLoginResp login(LoginDTO loginDTO){
         QueryWrapper<User> queryWrapper = new QueryWrapper();
         queryWrapper.lambda().eq(User::getPhone,loginDTO.getPhone());
         User userDB = userMapper.selectOne(queryWrapper);
@@ -33,7 +38,14 @@ public class UserService {
        if(!userDB.getPassword().equals(loginDTO.getPassword())){
            throw new BusinessException(BusinessExceptionEnum.PASSWORD_ERROR);
        }
-       return userDB;
+        UserLoginResp userLoginResp = UserLoginResp.builder()
+                .user(userDB)
+                .build();
+       String key = "wml";
+       Map<String ,Object> map = BeanUtil.beanToMap(userLoginResp);
+       String token = JWTUtil.createToken(map,key.getBytes());
+       userLoginResp.setToken(token);
+       return userLoginResp;
 
     }
 
