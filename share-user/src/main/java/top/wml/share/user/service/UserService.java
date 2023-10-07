@@ -7,6 +7,7 @@ import jakarta.annotation.Resource;
 import org.springframework.stereotype.Service;
 import top.wml.share.common.exception.BusinessException;
 import top.wml.share.common.exception.BusinessExceptionEnum;
+import top.wml.share.common.util.JwtUtil;
 import top.wml.share.common.util.SnowUtil;
 import top.wml.share.user.domain.dto.LoginDTO;
 
@@ -41,10 +42,11 @@ public class UserService {
         UserLoginResp userLoginResp = UserLoginResp.builder()
                 .user(userDB)
                 .build();
-       String key = "wml";
-       Map<String ,Object> map = BeanUtil.beanToMap(userLoginResp);
-       String token = JWTUtil.createToken(map,key.getBytes());
-       userLoginResp.setToken(token);
+//       String key = "wml";
+//       Map<String ,Object> map = BeanUtil.beanToMap(userLoginResp);
+//       String token = JWTUtil.createToken(map,key.getBytes());
+        String token = JwtUtil.createToken(userLoginResp.getUser().getId(), userLoginResp.getUser().getPhone());
+        userLoginResp.setToken(token);
        return userLoginResp;
 
     }
