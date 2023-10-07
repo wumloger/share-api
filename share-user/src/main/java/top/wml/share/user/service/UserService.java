@@ -3,6 +3,8 @@ package top.wml.share.user.service;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import jakarta.annotation.Resource;
 import org.springframework.stereotype.Service;
+import top.wml.share.common.exception.BusinessException;
+import top.wml.share.common.exception.BusinessExceptionEnum;
 import top.wml.share.user.domain.dto.LoginDTO;
 
 import top.wml.share.user.domain.entity.User;
@@ -23,10 +25,10 @@ public class UserService {
         queryWrapper.lambda().eq(User::getPhone,loginDTO.getPhone());
         User userDB = userMapper.selectOne(queryWrapper);
         if(userDB == null){
-           throw new RuntimeException("手机号不存在");
+           throw new BusinessException(BusinessExceptionEnum.PHONE_NOT_EXIST);
        }
        if(!userDB.getPassword().equals(loginDTO.getPassword())){
-           throw new RuntimeException("密码错误");
+           throw new BusinessException(BusinessExceptionEnum.PASSWORD_ERROR);
        }
        return userDB;
 
