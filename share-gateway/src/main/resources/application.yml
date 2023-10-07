@@ -1,0 +1,10 @@
+server:
+  port: 8000
+spring:
+  cloud:
+    gateway:
+      routes:
+        - id: route-user
+          uri: http://localhost:8001
+          predicates:
+            - Path=/user-service/**
