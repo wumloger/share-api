@@ -2,7 +2,7 @@ package top.wml.share.content.service;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.github.pagehelper.util.StringUtil;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import jakarta.annotation.Resource;
 import org.springframework.stereotype.Service;
 
@@ -22,14 +22,18 @@ public class ShareService {
     @Resource
     private MidUserShareMapper midUserShareMapper;
 
-    public List<Share> getList(String title,Long userId){
+    public List<Share> getList(String title,Integer pageNo,Integer pageSize,Long userId){
         LambdaQueryWrapper<Share> wrapper = new LambdaQueryWrapper<>();
         wrapper.orderByDesc(Share::getId);
-        if(StringUtil.isNotEmpty(title)){
+        if(title != null){
             wrapper.like(Share::getTitle,title);
         }
         wrapper.eq(Share::getAuditStatus,"PASS").eq(Share::getShowFlag,true);
-        List<Share> shares = shareMapper.selectList(wrapper);
+        Page<Share> page = Page.of(pageNo,pageSize);
+//        shareMapper.selectList(wrapper);
+
+        List<Share> shares = shareMapper.selectList(page, wrapper);
+//        List<Share> shares = shareMapper.selectList(wrapper);
 
         List<Share> sharesDeal;
         if(userId == null){
