@@ -6,8 +6,12 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import jakarta.annotation.Resource;
 import org.springframework.stereotype.Service;
 
+import top.wml.share.common.resp.CommonResp;
 import top.wml.share.content.domain.entity.MidUserShare;
 import top.wml.share.content.domain.entity.Share;
+import top.wml.share.content.domain.entity.User;
+import top.wml.share.content.domain.resp.ShareResp;
+import top.wml.share.content.feign.UserService;
 import top.wml.share.content.mapper.MidUserShareMapper;
 import top.wml.share.content.mapper.ShareMapper;
 
@@ -18,6 +22,9 @@ import java.util.stream.Collectors;
 public class ShareService {
     @Resource
     private ShareMapper shareMapper;
+
+    @Resource
+    private UserService userService;
 
     @Resource
     private MidUserShareMapper midUserShareMapper;
@@ -50,6 +57,15 @@ public class ShareService {
         }
         return sharesDeal;
 
+    }
+    public ShareResp findById(Long shareId){
+        Share share = shareMapper.selectById(shareId);
+        CommonResp<User> commonResp = userService.getUser(share.getUserId());
+        return ShareResp.builder()
+                .share(share)
+                .nickname(commonResp.getData().getNickname())
+                .avatarUrl(commonResp.getData().getAvatarUrl())
+                .build();
 
     }
 
