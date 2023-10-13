@@ -7,6 +7,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 import top.wml.share.common.resp.CommonResp;
 import top.wml.share.common.util.JwtUtil;
+import top.wml.share.content.domain.dto.ExchangeDTO;
+import top.wml.share.content.domain.dto.ShareRequestDTO;
 import top.wml.share.content.domain.entity.Notice;
 import top.wml.share.content.domain.entity.Share;
 import top.wml.share.content.domain.resp.ShareResp;
@@ -27,6 +29,16 @@ public class ShareController {
     private ShareService shareService;
 
     private final int MAX = 100;
+
+    @PostMapping("/contribute")
+    public CommonResp<Integer> contributeShare(@RequestBody ShareRequestDTO shareRequestDTO, @RequestHeader(value = "token",required = false) String token){
+        long userId = getUserIdFromToken(token);
+        shareRequestDTO.setUserId(userId);
+        System.out.println(shareRequestDTO);
+        CommonResp<Integer> resp = new CommonResp<>();
+        resp.setData(shareService.contribute(shareRequestDTO));
+        return resp;
+    }
 
     @GetMapping("/notice")
     public CommonResp<Notice> getLatestNotice(){
@@ -68,6 +80,29 @@ public class ShareController {
         ShareResp shareResp = shareService.findById(id);
         CommonResp<ShareResp> commonResp = new CommonResp<>();
         commonResp.setData(shareResp);
+        return commonResp;
+    }
+
+    @PostMapping("/exchange")
+    public CommonResp<Share> exchage(@RequestBody ExchangeDTO exchangeDTO){
+        System.out.println(exchangeDTO);
+        CommonResp<Share> commonResp = new CommonResp<>();
+        commonResp.setData(shareService.exchange(exchangeDTO));
+        return commonResp;
+    }
+
+    @GetMapping("/my-contribute")
+    public CommonResp<List<Share>> myContribute(
+           @RequestParam(required = false,defaultValue = "1") Integer pageNo,
+            @RequestParam(required = false,defaultValue = "8") Integer pageSize,
+            @RequestHeader(value = "token",required = false) String token
+    ){
+        if(pageSize > MAX){
+            pageSize = MAX;
+        }
+        long userId = getUserIdFromToken(token);
+        CommonResp<List<Share>> commonResp = new CommonResp<>();
+        commonResp.setData(shareService.myContribute(pageNo,pageSize,userId));
         return commonResp;
     }
 

@@ -3,6 +3,8 @@ server:
 #  servlet:
 #    context-path: /user-service
 spring:
+#  jackson:
+#    date-format: 'yyyy-MM-dd HH:mm:ss'
   application:
     name: user-service
   cloud:

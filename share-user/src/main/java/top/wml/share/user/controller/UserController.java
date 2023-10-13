@@ -5,6 +5,7 @@ import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.*;
 import top.wml.share.common.resp.CommonResp;
 import top.wml.share.user.domain.dto.LoginDTO;
+import top.wml.share.user.domain.dto.UserAddBonusMsgDTO;
 import top.wml.share.user.domain.entity.User;
 import top.wml.share.user.resp.UserLoginResp;
 import top.wml.share.user.service.UserService;
@@ -45,6 +46,22 @@ public class UserController {
         User user = userService.findById(id);
         CommonResp<User> commonResp = new CommonResp<>();
         commonResp.setData(user);
+        return commonResp;
+    }
+
+    @PutMapping("/update-bonus")
+    public CommonResp<User> updateBonus(@RequestBody UserAddBonusMsgDTO userAddBonusMsgDTO){
+        Long userId = userAddBonusMsgDTO.getUserId();
+        userService.updateBonus(
+                UserAddBonusMsgDTO.builder()
+                        .userId(userId)
+                        .bonus(userAddBonusMsgDTO.getBonus())
+                        .description("兑换分享")
+                        .event("BUY")
+                        .build()
+        );
+        CommonResp<User> commonResp = new CommonResp<>();
+        commonResp.setData(userService.findById(userId));
         return commonResp;
     }
 }

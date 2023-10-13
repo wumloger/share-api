@@ -10,3 +10,38 @@ token: {{token}}
 GET http://localhost:8000/content-service/share/1
 Accept: application/json
 token: {{token}}
+
+###
+POST http://localhost:8000/content-service/share/exchange
+content-type: application/json
+Accept: application/json
+token: {{token}}
+
+{
+  "userId": 2,
+  "shareId": 22
+}
+###
+###投稿
+POST http://localhost:8000/content-service/share/contribute
+content-type: application/json
+Accept: application/json
+token: {{token}}
+
+{
+  "userId": 2,
+  "author": "尤雨溪",
+  "title": "详解 Vue.js",
+  "isOriginal": 1,
+  "price": 20,
+  "downloadUrl": "https://cn.vuejs.org/",
+  "cover": "https://pic.imgdb.cn/item/6523f17dc458853aef61feba.png",
+  "summary": "详解 Vue.js，详解 Vue.js，详解 Vue.js，详解 Vue.js详解 Vue.js"
+
+}
+
+###我的投稿
+GET http://localhost:8000/content-service/share/my-contribute?pageNo=2&pageSize=2
+Accept: application/json
+token: {{token}}
+###

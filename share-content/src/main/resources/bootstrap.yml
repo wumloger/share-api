@@ -1,0 +1,10 @@
+spring:
+  application:
+    name: content-service
+  cloud:
+    nacos:
+      config:
+        file-extension: yml
+        refresh-enabled: true
+        server-addr: 127.0.0.1:8848
+        namespace: dev
