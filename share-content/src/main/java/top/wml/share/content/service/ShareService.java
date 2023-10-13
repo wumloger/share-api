@@ -124,7 +124,7 @@ public class ShareService {
 
     public List<Share> myContribute(Integer pageNo,Integer pageSize, Long userId){
         LambdaQueryWrapper<Share> wrapper = new LambdaQueryWrapper<>();
-        wrapper.orderByAsc(Share::getId);
+        wrapper.orderByDesc(Share::getId);
         wrapper.eq(Share::getUserId,userId);
         Page<Share> page = Page.of(pageNo,pageSize);
         return shareMapper.selectList(page,wrapper);
