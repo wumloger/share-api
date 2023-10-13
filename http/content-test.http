@@ -45,3 +45,9 @@ GET http://localhost:8000/content-service/share/my-contribute?pageNo=2&pageSize=
 Accept: application/json
 token: {{token}}
 ###
+
+###审核投稿
+GET http://localhost:8000/content-service/share/admin/list
+Accept: application/json
+token:{{token}}
+###
