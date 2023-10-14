@@ -51,3 +51,14 @@ GET http://localhost:8000/content-service/share/admin/list
 Accept: application/json
 token:{{token}}
 ###
+POST http://localhost:8000/content-service/share/admin/audit/1712876428026486786
+content-type: application/json
+Accept: application/json
+token: {{token}}
+
+{
+  "auditStatusEnum": "PASS",
+  "reason": "通过审核",
+  "showFlag": true
+}
+###

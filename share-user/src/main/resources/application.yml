@@ -22,3 +22,7 @@ spring:
 logging:
   level:
     top.wml.share.user.mapper: debug
+rocketmq:
+  name-server: 47.113.151.162:9876
+  producer:
+    group: test-group
