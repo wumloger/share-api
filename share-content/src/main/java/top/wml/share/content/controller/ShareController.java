@@ -30,6 +30,14 @@ public class ShareController {
 
     private final int MAX = 100;
 
+    @GetMapping("/exchanges/{id}")
+    public CommonResp<List<Share>> getMyExchanges(@PathVariable Long id){
+        List<Share> myExchange = shareService.getMyExchange(id);
+        CommonResp<List<Share>> resp = new CommonResp<>();
+        resp.setData(myExchange);
+        return resp;
+    }
+
     @PostMapping("/contribute")
     public CommonResp<Integer> contributeShare(@RequestBody ShareRequestDTO shareRequestDTO, @RequestHeader(value = "token",required = false) String token){
         long userId = getUserIdFromToken(token);

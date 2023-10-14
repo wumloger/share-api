@@ -2,7 +2,9 @@ package top.wml.share.user.service;
 
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.jwt.JWTUtil;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -22,6 +24,7 @@ import top.wml.share.user.resp.UserLoginResp;
 
 import java.nio.charset.StandardCharsets;
 import java.util.Date;
+import java.util.List;
 import java.util.Map;
 
 @Service
@@ -104,6 +107,14 @@ public class UserService {
 
     public User findById(Long userId){
         return userMapper.selectById(userId);
+    }
+
+    public List<BonusEventLog> bonusLogs(Long id,int pageNo,int pageSize){
+        LambdaQueryWrapper<BonusEventLog> wrapper = new LambdaQueryWrapper<>();
+        wrapper.eq(BonusEventLog::getUserId,id);
+        wrapper.orderByDesc(BonusEventLog::getCreateTime);
+        Page<BonusEventLog> page = Page.of(pageNo,pageSize);
+        return bonusEventLogMapper.selectList(page,wrapper);
     }
 
 }

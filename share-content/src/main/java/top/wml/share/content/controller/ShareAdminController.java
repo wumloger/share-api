@@ -5,8 +5,10 @@ import org.springframework.web.bind.annotation.*;
 import top.wml.share.common.resp.CommonResp;
 import top.wml.share.content.domain.dto.ShareAuditDTO;
 import top.wml.share.content.domain.entity.Share;
+import top.wml.share.content.domain.resp.ShareResp2;
 import top.wml.share.content.service.ShareService;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -16,9 +18,20 @@ public class ShareAdminController {
     private ShareService shareService;
 
     @GetMapping(value = "/list")
-    public CommonResp<List<Share>> getShareNotYet(){
-        CommonResp<List<Share>> commonResp = new CommonResp<>();
-        commonResp.setData(shareService.queryShareNotYet());
+    public CommonResp<List<ShareResp2>> getShareNotYet(){
+        CommonResp<List<ShareResp2>> commonResp = new CommonResp<>();
+        List<Share> shares = shareService.queryShareNotYet();
+        List<ShareResp2> list = new ArrayList<>();
+        System.out.println(shares);
+        shares.forEach((item)->{
+            ShareResp2 shareResp2 = ShareResp2.builder()
+                    .share(item)
+                    .id(item.getId().toString())
+                    .build();
+            list.add(shareResp2);
+        });
+        System.out.println(list);
+        commonResp.setData(list);
         return commonResp;
     }
 

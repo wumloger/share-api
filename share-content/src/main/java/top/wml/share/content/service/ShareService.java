@@ -166,4 +166,12 @@ public class ShareService {
 
     }
 
+    public List<Share> getMyExchange(Long userId){
+        LambdaQueryWrapper<MidUserShare> wrapper = new LambdaQueryWrapper<>();
+        wrapper.eq(MidUserShare::getUserId,userId);
+        wrapper.select(MidUserShare::getShareId);
+        List<MidUserShare> shares = midUserShareMapper.selectList(wrapper);
+        return shareMapper.selectBatchIds(shares.stream().map(item->item.getShareId()).collect(Collectors.toList()));
+    }
+
 }
